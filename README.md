@@ -1,1 +1,1 @@
-# java-maze-tutorial
+# Java maze tutorial
