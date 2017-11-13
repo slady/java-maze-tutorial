@@ -3,6 +3,7 @@ package ps.java.tutorial.maze;
 import ps.java.tutorial.maze.api.Coordinate;
 import ps.java.tutorial.maze.api.Direction;
 import ps.java.tutorial.maze.api.MazeTile;
+import ps.java.tutorial.maze.api.PathStep;
 import ps.java.tutorial.maze.util.DistanceField;
 
 import java.io.BufferedReader;
@@ -10,7 +11,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Maze {
 
@@ -50,7 +53,7 @@ public class Maze {
         return maze[y][x];
     }
 
-    public List<Direction> findPath(final Coordinate coordinateStart, final Coordinate coordinateFinish) {
+    public List<PathStep> findPath(final Coordinate coordinateStart, final Coordinate coordinateFinish) {
         final int maxY = maze.length;
         final int maxX = maze[0].length;
         final DistanceField distanceField = new DistanceField(maxX, maxY);
@@ -76,7 +79,7 @@ public class Maze {
                     }
 
                     if (newX == coordinateStart.getX() && newY == coordinateStart.getY()) {
-                        return distanceField.findPath(coordinateStart);
+                        return distanceField.findPath(coordinateStart, i);
                     }
 
                     newList.add(newCoordinate);
@@ -88,6 +91,42 @@ public class Maze {
         }
 
         return null;
+    }
+
+    public String printWithPath(List<PathStep> path) {
+        final StringBuilder buf = new StringBuilder();
+        final Map<Integer, Map<Integer, Direction>> map = new HashMap<>();
+
+        for (final PathStep pathStep : path) {
+            final Coordinate coordinate = pathStep.getCoordinate();
+            final int y = coordinate.getY();
+
+            if (!map.containsKey(y)) {
+                map.put(y, new HashMap<>());
+            }
+
+            final Map<Integer, Direction> mapY = map.get(y);
+            mapY.put(coordinate.getX(), pathStep.getDirection());
+        }
+
+        final int maxY = maze.length;
+        final int maxX = maze[0].length;
+
+        for (int y = 0; y < maxY; y++) {
+            final Map<Integer, Direction> mapY = map.get(y);
+
+            for (int x = 0; x < maxX; x++) {
+                if (mapY != null && mapY.containsKey(x)) {
+                    buf.append(mapY.get(x).getCh());
+                } else {
+                    buf.append(get(x, y).getCh());
+                }
+            }
+
+            buf.append('\n');
+        }
+
+        return buf.toString();
     }
 
 }
