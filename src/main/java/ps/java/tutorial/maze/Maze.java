@@ -1,5 +1,10 @@
 package ps.java.tutorial.maze;
 
+import ps.java.tutorial.maze.api.Coordinate;
+import ps.java.tutorial.maze.api.Direction;
+import ps.java.tutorial.maze.api.MazeTile;
+import ps.java.tutorial.maze.util.DistanceField;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -43,6 +48,46 @@ public class Maze {
 
     public MazeTile get(final int x, final int y) {
         return maze[y][x];
+    }
+
+    public List<Direction> findPath(final Coordinate coordinateStart, final Coordinate coordinateFinish) {
+        final int maxY = maze.length;
+        final int maxX = maze[0].length;
+        final DistanceField distanceField = new DistanceField(maxX, maxY);
+        List<Coordinate> oldList = new ArrayList<>();
+        oldList.add(coordinateFinish);
+        distanceField.add(coordinateFinish, 0, null);
+
+        for (int i = 0; !oldList.isEmpty(); i++) {
+            final List<Coordinate> newList = new ArrayList<>();
+
+            for (final Coordinate coordinate : oldList) {
+                for (final Direction direction : Direction.values()) {
+                    final Coordinate newCoordinate = coordinate.go(direction);
+                    final int newX = newCoordinate.getX();
+                    final int newY = newCoordinate.getY();
+
+                    if (newX < 0 || newY < 0 || newX >= maxX || newY >= maxY) {
+                        continue;
+                    }
+
+                    if (distanceField.get(newX, newY) != null || this.get(newX, newY) == MazeTile.WALL) {
+                        continue;
+                    }
+
+                    if (newX == coordinateStart.getX() && newY == coordinateStart.getY()) {
+                        return distanceField.findPath(coordinateStart);
+                    }
+
+                    newList.add(newCoordinate);
+                    distanceField.add(newCoordinate, i, direction);
+                }
+            }
+
+            oldList = newList;
+        }
+
+        return null;
     }
 
 }

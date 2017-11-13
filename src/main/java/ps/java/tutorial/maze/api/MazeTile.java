@@ -1,4 +1,4 @@
-package ps.java.tutorial.maze;
+package ps.java.tutorial.maze.api;
 
 public enum MazeTile {
 
