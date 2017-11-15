@@ -11,13 +11,10 @@ public class DistanceField {
 
     private final Integer[][] distanceField;
 
-    private final Direction[][] directionField;
-
     private final int maxX, maxY;
 
     public DistanceField(final int x, final int y) {
         distanceField = new Integer[y][x];
-        directionField = new Direction[y][x];
         maxX = x;
         maxY = y;
     }
@@ -26,11 +23,10 @@ public class DistanceField {
         return distanceField[y][x];
     }
 
-    public void add(final Coordinate coordinate, final int distance, final Direction direction) {
+    public void add(final Coordinate coordinate, final int distance) {
         final int x = coordinate.getX();
         final int y = coordinate.getY();
         distanceField[y][x] = distance;
-        directionField[y][x] = direction;
     }
 
     public List<PathStep> findPath(final Coordinate startCoordinate, final int startValue) {
@@ -50,21 +46,20 @@ public class DistanceField {
                 }
 
                 final Integer newDistance = get(newX, newY);
-                if (newDistance == null) {
+
+                if (newDistance == null || newDistance >= value) {
                     continue;
                 }
 
-                if (newDistance < value) {
-                    value = newDistance;
+                path.add(new PathStep(direction, coordinate));
 
-                    if (value == 0) {
-                        return path;
-                    }
-
-                    path.add(new PathStep(directionField[newY][newX], coordinate));
-                    coordinate = newCoordinate;
-                    continue OUTER;
+                if (newDistance == 0) {
+                    return path;
                 }
+
+                value = newDistance;
+                coordinate = newCoordinate;
+                continue OUTER;
             }
 
             throw new IllegalStateException("Broken path search algorithm!");

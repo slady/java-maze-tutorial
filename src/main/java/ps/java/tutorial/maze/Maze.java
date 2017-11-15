@@ -59,9 +59,9 @@ public class Maze {
         final DistanceField distanceField = new DistanceField(maxX, maxY);
         List<Coordinate> oldList = new ArrayList<>();
         oldList.add(coordinateFinish);
-        distanceField.add(coordinateFinish, 0, null);
+        distanceField.add(coordinateFinish, 0);
 
-        for (int i = 0; !oldList.isEmpty(); i++) {
+        for (int i = 1; !oldList.isEmpty(); i++) {
             final List<Coordinate> newList = new ArrayList<>();
 
             for (final Coordinate coordinate : oldList) {
@@ -83,7 +83,7 @@ public class Maze {
                     }
 
                     newList.add(newCoordinate);
-                    distanceField.add(newCoordinate, i, direction);
+                    distanceField.add(newCoordinate, i);
                 }
             }
 
@@ -93,7 +93,7 @@ public class Maze {
         return null;
     }
 
-    public String printWithPath(List<PathStep> path) {
+    public String printWithPath(final List<PathStep> path) {
         final StringBuilder buf = new StringBuilder();
         final Map<Integer, Map<Integer, Direction>> map = new HashMap<>();
 

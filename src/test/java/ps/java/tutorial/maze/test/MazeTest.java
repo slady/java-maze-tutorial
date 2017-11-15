@@ -67,7 +67,7 @@ public class MazeTest {
         final Maze maze = new Maze("src/test/resources/maze1.txt");
         final List<PathStep> path = maze.findPath(new Coordinate(1, 1), new Coordinate(8, 2));
         Assert.assertNotNull(path);
-        Assert.assertEquals(6, path.size());
+        Assert.assertEquals(8, path.size());
         System.out.println(maze.printWithPath(path));
     }
 
@@ -76,7 +76,7 @@ public class MazeTest {
         final Maze maze = new Maze("src/test/resources/maze2.txt");
         final List<PathStep> path = maze.findPath(new Coordinate(1, 1), new Coordinate(8, 5));
         Assert.assertNotNull(path);
-        Assert.assertEquals(23, path.size());
+        Assert.assertEquals(25, path.size());
         System.out.println(maze.printWithPath(path));
     }
 
