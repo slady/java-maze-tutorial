@@ -43,4 +43,9 @@ public class Coordinate {
         return new Coordinate(x + direction.getX(), y + direction.getY());
     }
 
+    @Override
+    public String toString() {
+        return "(" + x + "," + y + ")";
+    }
+
 }

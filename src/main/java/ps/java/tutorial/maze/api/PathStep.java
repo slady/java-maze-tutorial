@@ -19,4 +19,9 @@ public class PathStep {
         return coordinate;
     }
 
+    @Override
+    public String toString() {
+        return coordinate.toString() + ": " + direction.toString();
+    }
+
 }

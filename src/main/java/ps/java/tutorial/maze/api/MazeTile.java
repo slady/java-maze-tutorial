@@ -15,4 +15,9 @@ public enum MazeTile {
         return ch;
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(ch);
+    }
+
 }
