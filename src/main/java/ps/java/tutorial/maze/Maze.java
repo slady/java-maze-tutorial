@@ -11,9 +11,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Maze {
 
@@ -95,19 +95,12 @@ public class Maze {
 
     public String printWithPath(final List<PathStep> path) {
         final StringBuilder buf = new StringBuilder();
-        final Map<Integer, Map<Integer, Direction>> map = new HashMap<>();
-
-        for (final PathStep pathStep : path) {
-            final Coordinate coordinate = pathStep.getCoordinate();
-            final int y = coordinate.getY();
-
-            if (!map.containsKey(y)) {
-                map.put(y, new HashMap<>());
-            }
-
-            final Map<Integer, Direction> mapY = map.get(y);
-            mapY.put(coordinate.getX(), pathStep.getDirection());
-        }
+        final Map<Integer, Map<Integer, Direction>> map = path.stream().collect(
+                Collectors.groupingBy(
+                        step -> step.getCoordinate().getY(),
+                        Collectors.toMap(
+                                step -> step.getCoordinate().getX(),
+                                PathStep::getDirection)));
 
         final int maxY = maze.length;
         final int maxX = maze[0].length;
