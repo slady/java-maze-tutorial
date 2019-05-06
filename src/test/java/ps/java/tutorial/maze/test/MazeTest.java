@@ -48,8 +48,8 @@ public class MazeTest {
         Assert.assertNotEquals(coordinate1, coordinate3);
 
         Assert.assertEquals(1001, coordinate1.hashCode());
-        Assert.assertTrue(coordinate1.equals(coordinate2));
-        Assert.assertFalse(coordinate1.equals(coordinate3));
+        Assert.assertEquals(coordinate1, coordinate2);
+        Assert.assertNotEquals(coordinate1, coordinate3);
 
         final Coordinate coordinateGo = coordinate1.go(Direction.RIGHT);
         Assert.assertEquals(2, coordinateGo.getX());
