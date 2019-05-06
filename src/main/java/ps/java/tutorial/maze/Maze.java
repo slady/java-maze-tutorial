@@ -18,13 +18,15 @@ public class Maze {
 
     private final MazeTile[][] maze;
 
+    private final int maxX, maxY;
+
     public Maze(final String fileName) throws IOException {
         final List<String> lines = Files.readAllLines(Paths.get(fileName));
-        final int maxWidth = lines.stream().mapToInt(String::length).max().orElse(0);
+        maxX = lines.stream().mapToInt(String::length).max().orElse(0);
+        maxY = lines.size();
 
-        final int height = lines.size();
-        maze = new MazeTile[height][maxWidth];
-        for (int y = 0; y < height; y++) {
+        maze = new MazeTile[maxY][maxX];
+        for (int y = 0; y < maxY; y++) {
             final String line = lines.get(y);
             for (int x = 0; x < line.length(); x++) {
                 maze[y][x] = ('#' == line.charAt(x)) ? MazeTile.WALL : MazeTile.FREE;
@@ -37,8 +39,6 @@ public class Maze {
     }
 
     public List<PathStep> findPath(final Coordinate coordinateStart, final Coordinate coordinateFinish) {
-        final int maxY = maze.length;
-        final int maxX = maze[0].length;
         final DistanceField distanceField = new DistanceField(maxX, maxY);
         List<Coordinate> oldList = new ArrayList<>();
         oldList.add(coordinateFinish);
@@ -84,9 +84,6 @@ public class Maze {
                         Collectors.toMap(
                                 step -> step.getCoordinate().getX(),
                                 PathStep::getDirection)));
-
-        final int maxY = maze.length;
-        final int maxX = maze[0].length;
 
         for (int y = 0; y < maxY; y++) {
             final Map<Integer, Direction> mapY = map.get(y);
