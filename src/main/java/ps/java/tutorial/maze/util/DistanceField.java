@@ -24,9 +24,7 @@ public class DistanceField {
     }
 
     public void add(final Coordinate coordinate, final int distance) {
-        final int x = coordinate.getX();
-        final int y = coordinate.getY();
-        distanceField[y][x] = distance;
+        distanceField[coordinate.getY()][coordinate.getX()] = distance;
     }
 
     public List<PathStep> findPath(final Coordinate startCoordinate, final int startValue) {
